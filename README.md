@@ -1,12 +1,17 @@
 Saxondale
 
+ETags for assets that are delivered with Rails controllers
+
 ###Install
 
-Add to your Gemfile
+#####Add to your Gemfile
+
 
 ```ruby
   gem 'saxondale'
 ```
+
+#####Examples
 
 ```ruby
 # app/controllers/image_controller.rb
