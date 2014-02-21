@@ -1,11 +1,11 @@
 Saxondale
 
-===Install
+###Install
 
 Add to your Gemfile
 
 ```ruby
-  gem 'saxondale', path: '../workspace/saxondale'
+  gem 'saxondale'
 ```
 
 ```ruby
