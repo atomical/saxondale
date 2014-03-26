@@ -1,4 +1,5 @@
 require 'digest/md5'
+require 'saxondale/cache'
 
 module Saxondale
   module ControllerMethods
@@ -24,7 +25,7 @@ module Saxondale
           asset = (yield).try :first
           parent = instance_variable_get("@#{self.controller_name.singularize}")
 
-          if parent && asset && asset.encoding.name == 'ASCII-8BIT'
+          if parent && asset && asset.encoding.name.in?(['ASCII-8BIT','UTF-8'])
             hash = Digest::MD5.hexdigest(asset)
             controller_name = parent.class.to_s.classify.tableize
             Rails.cache.write(Saxondale::Cache.generate_key(controller_name, parent.id, params[:action]), hash)
