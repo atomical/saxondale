@@ -2,7 +2,10 @@ Saxondale
 
 ETags for assets that are delivered with Rails controllers
 
-###Install
+#####Purpose
+
+The assets in FedoraCommons are expensive to load.  This gem uses Rails conventions
+to cache and compare the hashes of ETags.
 
 #####Add to your Gemfile
 
@@ -31,8 +34,6 @@ end
 
 ```ruby
  # app/models/image.rb
- 
- before_save{ expire_etag :thumbnail }
- before_destroy{ expire_etag: thumbnail }
+  expire_etag :thumbnail
  
 ```
