@@ -22,13 +22,13 @@ module Saxondale
         if hash && hash == request.headers['If-None-Match']
           render(nothing: true, status: 304) and return
         else
-          asset = (yield).try :first
-          parent = instance_variable_get("@#{self.controller_name.singularize}")
+          asset       = (yield).try :first
+          parent_name = self.controller_name.singularize
 
-          if parent && asset && asset.encoding.name.in?(['ASCII-8BIT','UTF-8'])
+          if asset && asset.encoding.name.in?(['ASCII-8BIT','UTF-8'])
+            key  = Saxondale::Cache.generate_key(parent_name, params[:id], params[:action])
             hash = Digest::MD5.hexdigest(asset)
-            controller_name = parent.class.to_s.classify.tableize
-            Rails.cache.write(Saxondale::Cache.generate_key(controller_name, parent.id, params[:action]), hash)
+            Rails.cache.write(key, hash)
             response.headers['ETag'] = hash
           end
         end
