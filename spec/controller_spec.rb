@@ -30,8 +30,8 @@ describe ImagesController, type: :controller do
       end
 
       it 'does not yield to controller' do
+        get :thumbnail, :id => 1
         expect_any_instance_of(ImagesController).to_not receive(:send_data)
-        Rails.cache.write(Saxondale::Cache.generate_key('images', 1, 'thumbnail'), hash)
         request.env['If-None-Match'] = hash
         get :thumbnail, :id => 1
       end

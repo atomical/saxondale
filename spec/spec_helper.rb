@@ -9,6 +9,7 @@ require 'fixtures/controllers'
 require 'rspec/rails'
 require 'active_record'
 
+File.unlink('db/test.db') rescue nil
 
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
@@ -27,4 +28,13 @@ rescue
 end
 
 RSpec.configure do |config|
+
+  config.before(:each) do
+    Rails.cache.clear
+  end
+
+  config.after(:each) do
+    Rails.cache.clear
+  end
+
 end
