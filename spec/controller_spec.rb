@@ -1,12 +1,10 @@
 require 'spec_helper'
-require 'fixtures/models'
-
 
 describe ImagesController, type: :controller do
   render_views
 
   describe '#thumbnail' do
-
+    let(:image) { Image.create }
     let(:thumbnail){ IO.read('spec/fixtures/hiking.png') }
     let(:hash){ Digest::MD5.hexdigest(thumbnail) }
 
@@ -20,13 +18,14 @@ describe ImagesController, type: :controller do
     context 'cached' do
       it 'returns correct header' do
         @request['If-None-Match'] = hash
-        get :thumbnail, :id => 1
+        get :thumbnail, :id => image.id
         expect(response.headers['ETag']).to eq hash
       end
 
-      it 'does not return image' do
+      it 'does not return image when etag matches image hash' do
+        Rails.cache.write(Saxondale::Cache.generate_key( Image.to_s.classify.tableize, image.id, 'thumbnail' ), hash)
         request.env['If-None-Match'] = hash
-        get :thumbnail, :id => 1 
+        get :thumbnail, :id => image.id 
         expect(response.body.length).to eq 1
       end
 

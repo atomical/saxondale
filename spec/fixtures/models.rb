@@ -1,5 +1,11 @@
-class Image
-  def id
-    1
-  end
+require 'active_model'
+require 'active_record'
+require 'saxondale/model_methods'
+
+class Image < ActiveRecord::Base
+  extend Saxondale::ModelMethods
+  
+  expire_etag :thumbnail
+
 end
+

@@ -18,14 +18,21 @@ ETags for assets that are delivered with Rails controllers
 etag :thumbnail
 
 def thumbnail
-  @master_file = MasterFile.find(params[:id])
-  authorize! :read, @master_file.mediaobject
-  ds = @master_file.datastreams['thumbnail']
-  send_data ds.content, :filename => "poster-#{@master_file.pid.split(':')[1]}", :disposition => :inline, :type => ds.mimeType
+  @image = Image.find(params[:id])
+  authorize! :read, @image
+  data_stream = @image.datastreams['thumbnail']
+  send_data data_stream.content, 
+    filename: 'thumbnail', 
+    disposition: :inline, 
+    type: ds.mimeType)
 end
 ```
 
+
 ```ruby
  # app/models/image.rb
- expire_etag :thumbnail  #options:   when: [:after_save, :after_destroy]
+ 
+ before_save{ expire_etag :thumbnail }
+ before_destroy{ expire_etag: thumbnail }
+ 
 ```

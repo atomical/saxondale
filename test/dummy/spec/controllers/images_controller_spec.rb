@@ -49,7 +49,6 @@ describe ImagesController do
         get :thumbnail, {:id => 1}
         expect(response).to be_ok
       end
-
     end
   end
 end
